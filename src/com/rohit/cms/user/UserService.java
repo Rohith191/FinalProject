@@ -1,7 +1,7 @@
 package com.rohit.cms.user;
 
-import com.rohit.cms.main.CmsObserver;
 import com.rohit.cms.main.CmsUtil;
+import com.rohit.cms.models.CmsObserver;
 import com.rohit.cms.models.CmsObserverSubject;
 import com.rohit.cms.models.CmsUser;
 
@@ -19,8 +19,8 @@ public class UserService implements CmsObserverSubject {
 	}
 	
 	public void loginNewUser() {
-		this.user.username = CmsUtil.askForStringNewLine("Enter user name: ");
-        this.user.password = CmsUtil.askForStringNewLine("Enter password: ");
+		this.user.username = CmsUtil.askForStringSameLine("Enter user name: ");
+        this.user.password = CmsUtil.askForStringSameLine("Enter password: ");
 		this.user.setActiveUser();
 		this.user.greet();
 		notifyObserver("logged_in");
@@ -39,7 +39,7 @@ public class UserService implements CmsObserverSubject {
 	
 	@Override
 	public void notifyObserver(String s) {
-		this.observer.setState(s);
+		this.observer.setLocation(s);
 	}
 
 	public boolean isActive() {

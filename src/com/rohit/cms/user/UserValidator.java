@@ -3,18 +3,15 @@ package com.rohit.cms.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.rohit.cms.models.CmsUser;
-import com.rohit.cms.models.Validator;
+import com.rohit.cms.models.*;
 
-public class UserValidator implements Validator {
+public class UserValidator implements Validator<CmsUser> {
 	ArrayList<String> errors;
-	CmsUser user;
-	public UserValidator(CmsUser user) {
+	public UserValidator() {
 		this.errors = new ArrayList<String>();
-		this.user = user;
 	}
 	@Override
-	public boolean Validate() {
+	public boolean Validate(CmsUser user) {
 		if(user.username == "" || user.username == null) {
 			errors.add("Username cannot be empty");
 		}

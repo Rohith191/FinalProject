@@ -2,7 +2,7 @@ package com.rohit.cms.models;
 
 import java.util.List;
 
-public interface Validator {
+public interface Validator<T> {
 	List<String> getErrors();
-	boolean Validate();
+	boolean Validate(T obj);
 }
