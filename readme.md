@@ -116,3 +116,69 @@ There are 4 design patterns in the code base. The following section describes th
 
 ###	UML Diagram:
 ![enter image description here](https://raw.githubusercontent.com/Rohith191/FinalProject/main/docs/ObserverPattern.png?raw=true)
+
+# Write Up:
+
+I wanted to build a CMS cli that can
+
+1.  (Simulate) Login/logoff of a user
+
+2.  Do CRUD operations on articles
+
+Since it's a CLI, I needed a way to take commands from the user and
+trigger corresponding functionality.
+
+I chose the command pattern because it allows me to trigger
+functionality on services while decoupling execution between the cli
+input and classes that implement them.
+
+I felt the commands were a thin layer with almost no functionality in
+them and wondered if they were useful at all. But it came very handy in
+the CmsCommandInvoker because the execution has consistent API for all
+the cli commands (runCommand), and I can swap out the implementation of
+the command while keeping the invoker unchanged.
+
+I wanted to implement validation functionality since there is some
+amount of user input in the login and articles section. I needed a
+consistent API for both user and articles validator. Factory pattern was
+a good fit because it allowed me to return the instance of the validator
+I needed if I passed object class information to factory class. If I
+need to extend it with another validator, I can just implement another
+validator and update the factory class to return the correct validator
+for the respective object type.
+
+Being a CLI, there needed to be a way of tracking where the user is
+during the use and only allow some commands when the user is in a
+certain location. I also had to retrieve the current location to display
+it in the CLI. To accomplish this, I used Observer pattern where the
+services "notify" the registered observer on the current location. I had
+difficulty implementing this pattern as unlike the examples where there
+is a one-to-many relationship between subject and observer, I had 2
+subject classes which can mutate the location and one class to 'observe'
+the state. There is also some tight coupling between the observer and
+the subject class which is also happens to be the receiver service class
+implemented in command pattern.
+
+When the user wants to create an article, they can select premium or
+non-premium articles. Since the article object has custom logic if it\'s
+premium or not, I needed a way to separate the two ways to build the
+respective classes. Builder suited this well since I can create two
+different types of objects of the same class based on a condition like
+isPremium.
+
+The challenge I faced is to figure out which pattern would suit me best
+for the problem since I saw some similarities between Factory and
+Command pattern when I was trying to implement validation for user and
+article objects (using UserValidationCommand and
+ArticleValidationCommand which invoke UserValidationService and
+ArticleValidationService respectively). Then I realised, it\'s best to
+see which API makes sense from a consumer class and which pattern would
+best fit for the potential changes in the future.
+
+I chose Factory pattern for the validation since there will be a single
+validate method and that API will almost never change in contrast to the
+articles service which can have more features in the future and still
+needs to have consistent API in the invoker. Command pattern suited this
+better. I think with more practice I can get a hang of which pattern to
+use when.
+
